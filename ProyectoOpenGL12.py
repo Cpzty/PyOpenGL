@@ -10,6 +10,7 @@ from PIL import Image as Image
 import numpy
 from math import *
 
+from texture import *
 
 tree_vertices = (
 
@@ -289,6 +290,9 @@ colors = (
     )
 
 def Cube():
+
+    
+
     glBegin(GL_QUADS)
    
     for surface in surfaces:
@@ -298,9 +302,10 @@ def Cube():
         for vertex in surface:
             x+=1
             if vertex<=12:
-                glColor3fv(colors[x])
+                #glColor3fv(colors[x])
                 #glMaterialfv(GL_FRONT, GL_DIFFUSE, color)
                 glVertex3fv(vertices[vertex])
+                
     glEnd()
 
     
@@ -418,6 +423,8 @@ def main():
                     elif Load ==1:
                         Load = 2
                     elif Load ==2:
+                        Load = 3
+                    elif Load ==3:
                         Load = 0
                 if event.key ==pygame.K_c:
                     Load=0
@@ -500,6 +507,36 @@ def main():
                 house=1
             Cube()
             Door()
+
+        if Load ==3:
+            smurf  = pygame.image.load("brick.png")
+            bronze = pygame.image.tostring(smurf, "RGBA", 1)
+
+            width = smurf.get_width()
+            height = smurf.get_height()
+
+            glEnable(GL_TEXTURE_2D)
+            glEnable(GL_BLEND)
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+
+
+            texture = glGenTextures(1)
+            glBindTexture(GL_TEXTURE_2D, texture)
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
+            GL_UNSIGNED_BYTE, bronze)
+
+            glBegin(GL_QUADS)
+            glTexCoord2f(0,1)
+            glVertex3f(-300,300,20)
+            glTexCoord2f(1,1)
+            glVertex3f(300,300,20)
+            glTexCoord2f(1,0)
+            glVertex3f(300,-300,20)
+            glTexCoord2f(0,0)
+            glVertex3f(-300,-300,20)
+            glEnd()
            
         pygame.display.flip()
         pygame.time.wait(10)
