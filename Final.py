@@ -436,7 +436,7 @@ def main():
     (0,0,0,1)
     )
 
-    Load=0
+    Load=5
     Key_enable=0
     house1=0
     izquierda =0
